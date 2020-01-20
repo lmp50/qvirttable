@@ -1,20 +1,39 @@
 #include "qlogvirtualtable.h"
 
 QLogVirtualTable::QLogVirtualTable(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    m_iKeyCount(0),
+    m_iFieldCount(0)
 {
 
 }
 
 
-bool addFieldDefs(bool bKey,QString sFieldName,int ftFielType,int iSize,bool bRequired)
+bool QLogVirtualTable::addFieldDefs(const bool &bKey, const QString &sFieldName, enumFieldDefs ftFieldType, const int &iSize, const bool &bRequired)
 {
+    if ((ftFieldType == ftInt) || (ftFieldType == ftUInt)) {
+        if ((iSize != 1) && (iSize != 2) && (iSize != 4) && (iSize != 8)) {
+            return false;
+        }
+    }
+    if (ftFieldType == ftBool) {
+        if (iSize !=0 )
+            return false;
+    }
+    m_iFieldCount++;
+    m_vFieldDefs.resize(m_iFieldCount);
     if (bKey) {
-
+        m_iKeyCount++;
     }
-    else {
-
-    }
+    m_vFieldDefs[m_iFieldCount].m_sFieldName = sFieldName;
+    m_vFieldDefs[m_iFieldCount].m_ftFieldType = ftFieldType;
+    m_vFieldDefs[m_iFieldCount].m_iSize = iSize;
+    m_vFieldDefs[m_iFieldCount].m_bRequired = bRequired;
     return true;
 }
 
+bool QLogVirtualTable::insert()
+{
+
+    return true;
+}

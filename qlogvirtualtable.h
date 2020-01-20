@@ -3,6 +3,18 @@
 
 #include <QObject>
 #include <QMap>
+#include <QVector>
+
+enum enumFieldDefs {ftInt,ftUInt,ftBool,ftString};
+
+struct FieldDefs
+{
+    bool bKey;
+    QString m_sFieldName;
+    enumFieldDefs m_ftFieldType;
+    int m_iSize;
+    bool m_bRequired;
+};
 
 class QLogVirtualTable : public QObject
 {
@@ -10,7 +22,8 @@ class QLogVirtualTable : public QObject
 public:
     explicit QLogVirtualTable(QObject *parent = nullptr);
 
-    bool addFieldDefs(bool bKey,QString sFieldName,int ftFielType,int iSize,bool bRequired);
+    bool addFieldDefs(const bool &bKey, const QString &sFieldName, enumFieldDefs ftFieldType, const int &iSize, const bool &bRequired);
+    bool insert();
 
 
 signals:
@@ -21,8 +34,9 @@ private:
     QMap <QByteArray,QByteArray> m_Map;
     QByteArray m_baKey;
     QByteArray m_baValue;
-    QList <QString>m_lFieldName;
-    QList <int> m_ftFieldType;
+    QVector <FieldDefs> m_vFieldDefs;
+    int m_iKeyCount;
+    int m_iFieldCount;
 };
 
 #endif // QLOGVIRTUALTABLE_H
